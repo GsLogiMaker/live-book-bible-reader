@@ -1,2 +1,2 @@
-# live-book-bible
-A bible reader developed specifically for live-streaming made in Godot.
+# Live Book Bible Reader
+A bible reader developed specifically for live-streaming. Made in Godot.
