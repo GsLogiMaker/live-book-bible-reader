@@ -4,12 +4,11 @@ const SAVE_FORMAT_VERSION:= 0
 
 @export var chapter_tab:PackedScene
 
+var bible_version:= "nkjv"
 ## An [Array] of the books of the bible.
-var books:= []
+var books:= load_book_names() as Array
 ## The currently selected chater tab.
 var current_tab:int = -1
-var to_book:String = "Genesis"
-var to_chapter:int = 1
 var fuzzy_books:Array = []
 var font_size:= 16:
 	set(v):
@@ -57,17 +56,10 @@ func _ready() -> void:
 		%PageResolutionY.value
 	)
 	
-	# Get books of bible
-	var outputs:= []
-	OS.execute("python3", ["Py/get_books.py"], outputs)
-	books = outputs[0].split(", ")
-	books.pop_back()
-	books = books.map(func(book:String):
-		book = book.strip_escapes()
-		return book.substr(0,book.length()-1)
-	)
-	
 	load_settings()
+
+	if %ChapterTabs.get_child_count() == 0:
+		add_tab("Genesis", 1)
 
 
 func add_tab(book:String, chapter:int) -> CanvasItem:
@@ -75,7 +67,7 @@ func add_tab(book:String, chapter:int) -> CanvasItem:
 	%ChapterTabs.add_child(new_tab)
 	new_tab.book = book
 	new_tab.chapter = chapter
-	new_tab.text = get_chapter_text(to_book, to_chapter)
+	new_tab.text = get_chapter_text(book, chapter)
 	new_tab.visible = false
 	new_tab.font_size = font_size
 	%ChapterTabBar.add_tab("%s %d" % [book, chapter])
@@ -104,19 +96,22 @@ func book_fuzzy_search(search_by:String) -> Array:
 	return closest_matches
 
 
+func load_book_names() -> Array:
+	var file:= FileAccess.open("res://bibles.txt", FileAccess.READ)
+	var arr:= file.get_as_text().split("\n") as Array
+	arr.erase("")
+	return arr
+
+
 func get_chapter_text(book:String, chapter:int) -> String:
-	var outputs:= []
-	OS.execute(
-		"python3",
-		[
-			"Py/nkjv_scraper.py",
-			"--site",
-			"https://www.biblegateway.com/passage/?search=%s+%d&version=%s"
-				% [book, chapter, "NKJV"]
-		],
-		outputs
-	)
-	return outputs[0]
+	var path:= "Bibles/%s/%s_%s.txt" \
+		% [bible_version, book.replace(" ", "_"), int(chapter)]
+	var file:= FileAccess.open(path, FileAccess.READ)
+	
+	if file == null:
+		return ""
+	
+	return file.get_as_text()
 
 
 func get_saving_properties() -> Dictionary:
@@ -130,11 +125,19 @@ func get_saving_properties() -> Dictionary:
 
 
 func goto_chapter(book:String, chapter:int) -> void:
+	var chapter_text:= get_chapter_text(book, chapter)
+	if chapter_text == "":
+		book = books[wrapi(books.find(book)+1, 0, books.size())]
+		chapter = 1
+		goto_chapter(book, chapter)
+	
 	%SearchBook.text = book
+	%SearchChapter.value = chapter
+	
 	var curr_chapter_tab:= %ChapterTabs.get_child(current_tab)
 	curr_chapter_tab.book = book
 	curr_chapter_tab.chapter = chapter
-	curr_chapter_tab.text = get_chapter_text(to_book, to_chapter)
+	curr_chapter_tab.text = get_chapter_text(book, chapter)
 	curr_chapter_tab.font_size = font_size
 	%ChapterTabBar.set_tab_title(current_tab, "%s %d" % [book, chapter])
 	
@@ -152,7 +155,8 @@ func load_settings() -> void:
 		for prop in obj_meta.params:
 			var config_property:= "%s.%s"%[obj_meta.name, prop]
 			if config.has_section_key("data", config_property):
-				obj.set(prop, config.get_value("data", config_property))
+				var val = config.get_value("data", config_property)
+				obj.set(prop, val)
 
 
 func remove_tab(tab_index:int) -> void:
@@ -168,7 +172,6 @@ func remove_tab(tab_index:int) -> void:
 func save_settings() -> void:
 	var config:= ConfigFile.new()
 	config.set_value("meta", "format", SAVE_FORMAT_VERSION)
-	prints("_tabs", self._tabs)
 	var to_save:= get_saving_properties()
 	for obj in to_save:
 		var obj_meta:Dictionary = to_save[obj]
@@ -195,11 +198,9 @@ func switch_tab(tab_index:int) -> void:
 
 
 func _on_fuzzy_book_pressed(button:Button) -> void:
-	to_book = button.text
-	%SearchBook.text = to_book
-	_on_search_book_text_changed(to_book)
+	_on_search_book_text_changed(button.text)
 	%SearchBook.grab_focus()
-	goto_chapter(to_book, to_chapter)
+	goto_chapter(button.text, %SearchChapter.value)
 
 
 func _on_search_book_text_changed(new_text:String) -> void:
@@ -212,7 +213,6 @@ func _on_search_book_text_changed(new_text:String) -> void:
 		return
 	
 	%FuzzyBooks.visible = true
-	to_book = str(fuzzy_books[0][0])
 	%FuzzyBook1.text = str(fuzzy_books[0][0])
 	%FuzzyBook2.text = str(fuzzy_books[1][0])
 	%FuzzyBook3.text = str(fuzzy_books[2][0])
@@ -220,12 +220,11 @@ func _on_search_book_text_changed(new_text:String) -> void:
 
 
 func _on_search_chapter_text_changed(value:int) -> void:
-	to_chapter = value
-	goto_chapter(to_book, to_chapter)
+	goto_chapter(%SearchBook.text, value)
 
 
 func _on_search_enter(_p=null) -> void:
-	goto_chapter(to_book, to_chapter)
+	goto_chapter(%SearchBook.text, %SearchChapter.value)
 
 
 func _on_tab_bar_tab_close_pressed(tab:int) -> void:
@@ -233,7 +232,7 @@ func _on_tab_bar_tab_close_pressed(tab:int) -> void:
 
 
 func _on_new_tab_pressed() -> void:
-	add_tab(to_book, to_chapter)
+	add_tab(%SearchBook.text, %SearchChapter.value)
 
 
 func _on_chapter_tab_bar_tab_changed(tab: int) -> void:
@@ -258,3 +257,8 @@ func _on_page_resiazable_toggled(button_pressed: bool) -> void:
 func _on_font_size_value_changed(value: float) -> void:
 	self.font_size = value
 	save_settings()
+
+
+func _on_scroll_value_changed(value: float) -> void:
+	var scroll_cont:= %ChapterTabs.get_child(current_tab).get_node(^"%TextScroll")
+	scroll_cont.scroll_vertical = value * scroll_cont.get_child(0).get_rect().size.y

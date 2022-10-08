@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 window/subwindows/embed_subwindows=false
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/SmoothScroll/plugin.cfg")
+
 [rendering]
 
 renderer/rendering_method="mobile"

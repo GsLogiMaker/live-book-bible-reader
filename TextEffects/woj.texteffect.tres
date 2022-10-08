@@ -1,0 +1,6 @@
+[gd_resource type="RichTextEffect" load_steps=2 format=3 uid="uid://c40yw3vkrmlb"]
+
+[ext_resource type="Script" path="res://TextEffects/WojTextEffect.gd" id="1_ekvne"]
+
+[resource]
+script = ExtResource("1_ekvne")
