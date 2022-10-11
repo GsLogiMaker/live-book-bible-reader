@@ -39,7 +39,6 @@ chapter_tab = ExtResource("2_rn5h4")
 
 [node name="ChapterTabs" type="MarginContainer" parent="."]
 unique_name_in_owner = true
-layout_mode = 2
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 1147.0
@@ -64,19 +63,16 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Window/MarginContainer"]
-layout_mode = 2
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 1147.0
 offset_bottom = 643.0
 
 [node name="TabControls" type="HBoxContainer" parent="Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
 offset_right = 1142.0
 offset_bottom = 31.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Window/MarginContainer/VBoxContainer/TabControls"]
-layout_mode = 2
 offset_right = 1049.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
@@ -85,14 +81,12 @@ vertical_scroll_mode = 0
 
 [node name="ChapterTabBar" type="TabBar" parent="Window/MarginContainer/VBoxContainer/TabControls/ScrollContainer"]
 unique_name_in_owner = true
-layout_mode = 2
 offset_right = 1049.0
 size_flags_horizontal = 3
 clip_tabs = false
 tab_close_display_policy = 2
 
 [node name="NewTab" type="Button" parent="Window/MarginContainer/VBoxContainer/TabControls"]
-layout_mode = 2
 offset_left = 1053.0
 offset_right = 1142.0
 offset_bottom = 31.0
@@ -100,20 +94,17 @@ size_flags_vertical = 0
 text = "+ New Tab"
 
 [node name="BookSearchContainer" type="HBoxContainer" parent="Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 35.0
 offset_right = 1142.0
 offset_bottom = 66.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer"]
-layout_mode = 2
 offset_right = 569.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 
 [node name="SearchBook" type="LineEdit" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer/VBoxContainer"]
 unique_name_in_owner = true
-layout_mode = 2
 offset_right = 569.0
 offset_bottom = 31.0
 focus_neighbor_right = NodePath("../../SearchChapter")
@@ -126,20 +117,17 @@ script = SubResource("GDScript_jd8xs")
 [node name="FuzzyBooks" type="PanelContainer" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
 offset_top = 35.0
 offset_right = 569.0
 offset_bottom = 67.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer/VBoxContainer/FuzzyBooks"]
-layout_mode = 2
 offset_right = 569.0
 offset_bottom = 32.0
 theme_override_constants/separation = 0
 
 [node name="FuzzyBook1" type="Button" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer/VBoxContainer/FuzzyBooks/VBoxContainer" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
-layout_mode = 2
 offset_right = 569.0
 offset_bottom = 8.0
 shortcut = SubResource("Shortcut_apwqq")
@@ -149,7 +137,6 @@ alignment = 0
 
 [node name="FuzzyBook2" type="Button" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer/VBoxContainer/FuzzyBooks/VBoxContainer" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
-layout_mode = 2
 offset_top = 8.0
 offset_right = 569.0
 offset_bottom = 16.0
@@ -159,7 +146,6 @@ alignment = 0
 
 [node name="FuzzyBook3" type="Button" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer/VBoxContainer/FuzzyBooks/VBoxContainer" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
-layout_mode = 2
 offset_top = 16.0
 offset_right = 569.0
 offset_bottom = 24.0
@@ -169,7 +155,6 @@ alignment = 0
 
 [node name="FuzzyBook4" type="Button" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer/VBoxContainer/FuzzyBooks/VBoxContainer" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
-layout_mode = 2
 offset_top = 24.0
 offset_right = 569.0
 offset_bottom = 32.0
@@ -180,7 +165,6 @@ alignment = 0
 
 [node name="SearchChapter" type="SpinBox" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer"]
 unique_name_in_owner = true
-layout_mode = 2
 offset_left = 573.0
 offset_right = 1142.0
 offset_bottom = 31.0
@@ -193,7 +177,6 @@ value = 1.0
 [node name="SearchVerse" type="SpinBox" parent="Window/MarginContainer/VBoxContainer/BookSearchContainer"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
 offset_left = 764.0
 offset_right = 1142.0
 offset_bottom = 31.0
@@ -204,21 +187,18 @@ max_value = 200.0
 value = 1.0
 
 [node name="PageLabel" type="Label" parent="Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 70.0
 offset_right = 1142.0
 offset_bottom = 96.0
 text = "Page Resolution"
 
 [node name="PageResolutionControls" type="HBoxContainer" parent="Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 100.0
 offset_right = 1142.0
 offset_bottom = 131.0
 
 [node name="PageResolutionX" type="SpinBox" parent="Window/MarginContainer/VBoxContainer/PageResolutionControls"]
 unique_name_in_owner = true
-layout_mode = 2
 offset_right = 516.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
@@ -229,7 +209,6 @@ suffix = "px"
 
 [node name="PageResolutionY" type="SpinBox" parent="Window/MarginContainer/VBoxContainer/PageResolutionControls"]
 unique_name_in_owner = true
-layout_mode = 2
 offset_left = 520.0
 offset_right = 1037.0
 offset_bottom = 31.0
@@ -241,7 +220,6 @@ suffix = "px"
 
 [node name="PageResiazable" type="CheckBox" parent="Window/MarginContainer/VBoxContainer/PageResolutionControls"]
 unique_name_in_owner = true
-layout_mode = 2
 offset_left = 1041.0
 offset_right = 1142.0
 offset_bottom = 31.0
@@ -249,21 +227,18 @@ button_pressed = true
 text = "Resizable"
 
 [node name="FontLabel" type="Label" parent="Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 135.0
 offset_right = 1142.0
 offset_bottom = 161.0
 text = "Font"
 
 [node name="FontControls" type="HBoxContainer" parent="Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 165.0
 offset_right = 1142.0
 offset_bottom = 196.0
 
 [node name="FontSizeLabel" type="Label" parent="Window/MarginContainer/VBoxContainer/FontControls"]
 self_modulate = Color(0.678431, 0.678431, 0.678431, 1)
-layout_mode = 2
 offset_top = 2.0
 offset_right = 70.0
 offset_bottom = 28.0
@@ -271,7 +246,6 @@ text = "Font Size"
 
 [node name="FontSize" type="SpinBox" parent="Window/MarginContainer/VBoxContainer/FontControls"]
 unique_name_in_owner = true
-layout_mode = 2
 offset_left = 74.0
 offset_right = 157.0
 offset_bottom = 31.0
@@ -282,7 +256,6 @@ suffix = "px"
 [node name="PanelContainer" type="PanelContainer" parent="Window/MarginContainer/VBoxContainer"]
 visible = false
 self_modulate = Color(1, 1, 1, 0)
-layout_mode = 2
 offset_top = 200.0
 offset_right = 1142.0
 offset_bottom = 638.0

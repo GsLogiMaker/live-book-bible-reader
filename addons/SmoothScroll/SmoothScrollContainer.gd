@@ -4,8 +4,11 @@
 ## functionality to a ScrollContainer
 extends ScrollContainer
 
+signal velocity_started
+signal velocity_stopped
+
 # Drag impact for one scroll input
-@export_range(10, 1)
+@export_range(0, 100, 1)
 var speed := 2
 # Softness of damping when "overdragging"
 @export_range(0, 1)
@@ -48,48 +51,50 @@ func _process(delta: float) -> void:
 	# If no scroll needed, don't apply forces
 	if content_node.size.y - self.size.y < 1:
 		return
-	
+
 	var d := delta
 	# Distance between content_node's bottom and bottom of the scroll box 
 	var bottom_distance : float = content_node.position.y + content_node.size.y - self.size.y
 	# Distance between content_node and top of the scroll box
 	var top_distance : float = content_node.position.y
-	
+
 	# If overdragged on bottom:
 	if bottom_distance< 0 :
 		over_drag_multiplicator_bottom = 1/abs(bottom_distance)*10
 	else:
 		over_drag_multiplicator_bottom = 1
-	
+
 	# If overdragged on top:
 	if top_distance> 0:
 		over_drag_multiplicator_top = 1/abs(top_distance)*10
 	else:
 		over_drag_multiplicator_top = 1
-	
+
 	# Simulate friction
 	velocity *= friction
-	
+
 	# If velocity is too low, just set it to 0
 	if velocity.length() <= just_stop_under:
+		if not is_zero_approx(velocity.length()):
+			velocity_stopped.emit()
 		velocity = Vector2(0,0)
-	
+
 	# Applies counterforces when overdragging
 	if bottom_distance< 0 :
 		velocity.y = lerp(velocity.y, -bottom_distance/8, damping)
 	if top_distance> 0:
 		velocity.y = lerp(velocity.y, -top_distance/8, damping)
-	
+
 	# If using scroll bar dragging, set the content_node's
 	# position by using the scrollbar position
 	if scrolling:
 		pos = content_node.position
 		return
-	
+
 	# Move content node by applying velocity
 	pos += velocity
 	content_node.position = pos
-	
+
 	# Update vertical scroll bar
 	set_v_scroll(-pos.y)
 
@@ -102,14 +107,22 @@ func _gui_input(event: InputEvent) -> void:
 		var scrolled = true
 		
 		match event.button_index:
-			MOUSE_BUTTON_WHEEL_DOWN:  velocity.y -= speed
-			MOUSE_BUTTON_WHEEL_UP:    velocity.y += speed
+			MOUSE_BUTTON_WHEEL_DOWN:
+				if is_zero_approx(velocity.length()):
+					velocity_started.emit()
+				velocity.y -= speed
+			MOUSE_BUTTON_WHEEL_UP:
+				if is_zero_approx(velocity.length()):
+					velocity_started.emit()
+				velocity.y += speed
 			_:                  scrolled = false
 			
 		if scrolled: friction = friction_scroll
 			
 	elif event is InputEventScreenDrag:
 		friction = friction_drag
+		if is_zero_approx(velocity.length()):
+			velocity_started.emit()
 		if scroll_horizontal: velocity.x = event.relative.x
 		if scroll_vertically:   velocity.y = event.relative.y
 

@@ -46,10 +46,12 @@ grow_vertical = 2
 script = ExtResource("1_qo15t")
 
 [node name="PanelContainer2" type="PanelContainer" parent="."]
+layout_mode = 2
 offset_right = 1152.0
 offset_bottom = 46.0
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer2"]
+layout_mode = 2
 offset_right = 1152.0
 offset_bottom = 46.0
 theme_override_constants/margin_left = 10
@@ -58,6 +60,7 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer2/MarginContainer"]
+layout_mode = 2
 offset_left = 10.0
 offset_top = 10.0
 offset_right = 1142.0
@@ -66,12 +69,14 @@ theme_override_constants/separation = 0
 
 [node name="BookTitle" type="Label" parent="PanelContainer2/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
+layout_mode = 2
 offset_right = 38.0
 offset_bottom = 26.0
 text = "Luke"
 
 [node name="TextScroll" type="ScrollContainer" parent="."]
 visible = false
+layout_mode = 2
 offset_top = 50.0
 offset_right = 1152.0
 offset_bottom = 347.0
@@ -80,12 +85,14 @@ theme = SubResource("Theme_d175w")
 horizontal_scroll_mode = 0
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
 offset_top = 50.0
 offset_right = 1152.0
 offset_bottom = 648.0
 size_flags_vertical = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
 offset_right = 1152.0
 offset_bottom = 598.0
 theme_override_constants/margin_left = 10
@@ -95,17 +102,20 @@ theme_override_constants/margin_bottom = 10
 
 [node name="TextScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer"]
 unique_name_in_owner = true
+layout_mode = 2
 offset_left = 10.0
 offset_top = 10.0
 offset_right = 1142.0
 offset_bottom = 588.0
 theme = SubResource("Theme_d175w")
 script = ExtResource("2_h6cu7")
-speed = 1.0
+speed = 3.0
 damping = 0.05
+friction_scroll = 0.91
 
 [node name="BibleText" type="RichTextLabel" parent="PanelContainer/MarginContainer/TextScroll"]
 unique_name_in_owner = true
+layout_mode = 2
 offset_right = 1132.0
 offset_bottom = 920.0
 size_flags_horizontal = 3
@@ -153,3 +163,6 @@ context_menu_enabled = true
 custom_effects = [ExtResource("3_i2cr3")]
 progress_bar_delay = 0
 selection_enabled = true
+
+[connection signal="velocity_started" from="PanelContainer/MarginContainer/TextScroll" to="." method="_on_text_scroll_velocity_started"]
+[connection signal="velocity_stopped" from="PanelContainer/MarginContainer/TextScroll" to="." method="_on_text_scroll_velocity_stopped"]

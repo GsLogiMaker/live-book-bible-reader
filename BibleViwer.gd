@@ -104,13 +104,15 @@ func load_book_names() -> Array:
 
 
 func get_chapter_text(book:String, chapter:int) -> String:
-	var path:= "Bibles/%s/%s_%s.txt" \
+	var path:= "res://bibles/%s/%s_%s.txt" \
 		% [bible_version, book.replace(" ", "_"), int(chapter)]
+	if not DirAccess.dir_exists_absolute(path):
+		path = "user://bibles/%s/%s_%s.txt" \
+			% [bible_version, book.replace(" ", "_"), int(chapter)]
+			
 	var file:= FileAccess.open(path, FileAccess.READ)
-	
 	if file == null:
 		return ""
-	
 	return file.get_as_text()
 
 

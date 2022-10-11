@@ -10,13 +10,20 @@ config_version=5
 
 [application]
 
-config/name="Bible Reader"
+config/name="BibleReader"
 run/main_scene="res://BibleViwer.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
+run/low_processor_mode_sleep_usec=10000
 config/icon="res://icon.svg"
+
+[debug]
+
+settings/fps/force_fps=30
 
 [display]
 
+window/energy_saving/keep_screen_on=false
+window/vsync/vsync_mode=0
 window/subwindows/embed_subwindows=false
 
 [editor_plugins]

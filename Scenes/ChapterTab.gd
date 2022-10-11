@@ -19,3 +19,11 @@ extends VBoxContainer
 		text = v
 		%BibleText.text = text
 
+
+
+func _on_text_scroll_velocity_started() -> void:
+	Engine.target_fps = 30
+
+
+func _on_text_scroll_velocity_stopped() -> void:
+	Engine.target_fps = 5
